@@ -2,10 +2,9 @@
 <meta charset="utf-8">
 <style> /* set the CSS */
 
-.line {
-  fill: none;
-  stroke: url(#line-gradient); // stroke (the colour of the line) is being determined at a link within the page which is set by the anchor #line-gradient
-  stroke-width: 2px;
+.area {             
+  fill: url(#area-gradient);          
+  stroke-width: 0px;      
 }
 
 div.tooltip {
@@ -40,10 +39,11 @@ var formatTime = d3.timeFormat("%e %B");
 var x = d3.scaleTime().range([0, width]);
 var y = d3.scaleLinear().range([height, 0]);
 
-// define the line
-var valueline = d3.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+// define the area
+var area = d3.area()  
+    .x(function(d) { return x(d.date); }) 
+    .y0(height)         
+    .y1(function(d) { return y(d.close); });
 
 var div = d3.select("body").append("div") // div is a container in html
     .attr("class", "tooltip")
@@ -75,7 +75,7 @@ d3.csv("data.csv", function(error, data) {
 
   // set the gradient
   svg.append("linearGradient")        
-    .attr("id", "line-gradient") // define the anchor (url) for CSS
+    .attr("id", "area-gradient") // define the anchor (url) for CSS
     .attr("gradientUnits", "userSpaceOnUse")  
     .attr("x1", 0).attr("y1", y(0))     
     .attr("x2", 0).attr("y2", y(1000))    // 1000 is chosen to align with the max value of our data around 630
@@ -92,11 +92,11 @@ d3.csv("data.csv", function(error, data) {
     .attr("offset", function(d) { return d.offset; }) 
     .attr("stop-color", function(d) { return d.color; }); 
 
-  // add the valueline path.
+  // Add the area.
   svg.append("path")
-     .data([data])
-     .attr("class", "line")
-     .attr("d", valueline);
+    .data([data])
+    .attr("class", "area")
+    .attr("d", area);
 
   // add the dots with tooltips
   svg.selectAll("dot")
