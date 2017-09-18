@@ -18,7 +18,6 @@ div.tooltip {
   background: lightsteelblue;
   border: 0px;
   border-radius: 8px;
-  pointer-events: none; // instruct the mouse event to go ‘through’ the element and target whatever is ‘underneath’ that element instead
 }
 
 </style>
@@ -91,15 +90,14 @@ d3.csv("data.csv", function(error, data) {
        div.transition()
          .duration(200)
          .style("opacity", .9);
-       div.html(formatTime(d.date) + "<br/>" + d.close) // equivalent to: div.text(formatTime(d.date) + "\n" + d.close)
-         .style("left", (d3.event.pageX) + "px")
+       div .html(
+         '<a href= "http://google.com">' + // The first <a> tag
+         formatTime(d.date) +
+         "</a>" +                          // closing </a> tag
+         "<br/>"  + d.close)     
+         .style("left", (d3.event.pageX) + "px")             
          .style("top", (d3.event.pageY - 28) + "px");
        })
-     .on("mouseout", function(d) {
-       div.transition()
-         .duration(500)
-         .style("opacity", 0);
-       });
 
   // add the X Axis
   svg.append("g")
