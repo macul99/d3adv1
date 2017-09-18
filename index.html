@@ -4,7 +4,7 @@
 
 .line {
   fill: none;
-  stroke: steelblue;
+  stroke: url(#line-gradient); // stroke (the colour of the line) is being determined at a link within the page which is set by the anchor #line-gradient
   stroke-width: 2px;
 }
 
@@ -72,6 +72,25 @@ d3.csv("data.csv", function(error, data) {
   // scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([0, d3.max(data, function(d) { return d.close; })]);
+
+  // set the gradient
+  svg.append("linearGradient")        
+    .attr("id", "line-gradient") // define the anchor (url) for CSS
+    .attr("gradientUnits", "userSpaceOnUse")  
+    .attr("x1", 0).attr("y1", y(0))     
+    .attr("x2", 0).attr("y2", y(1000))    // 1000 is chosen to align with the max value of our data around 630
+  .selectAll("stop") // stop elements define where on the range covered by our coordinates the colours start and stop.
+    .data([               
+      {offset: "0%", color: "red"},   
+      {offset: "40%", color: "red"},  
+      {offset: "40%", color: "black"},    
+      {offset: "62%", color: "black"},    
+      {offset: "62%", color: "lawngreen"},  
+      {offset: "100%", color: "lawngreen"}  
+    ])          
+  .enter().append("stop")     
+    .attr("offset", function(d) { return d.offset; }) 
+    .attr("stop-color", function(d) { return d.color; }); 
 
   // add the valueline path.
   svg.append("path")
