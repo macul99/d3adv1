@@ -18,7 +18,7 @@ div.tooltip {
   background: lightsteelblue;
   border: 0px;
   border-radius: 8px;
-  pointer-events: none;
+  pointer-events: none; // instruct the mouse event to go ‘through’ the element and target whatever is ‘underneath’ that element instead
 }
 
 </style>
@@ -46,7 +46,7 @@ var valueline = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.close); });
 
-var div = d3.select("body").append("div")
+var div = d3.select("body").append("div") // div is a container in html
     .attr("class", "tooltip")
     .style("opacity", 0);
 
@@ -91,7 +91,7 @@ d3.csv("data.csv", function(error, data) {
        div.transition()
          .duration(200)
          .style("opacity", .9);
-       div.html(formatTime(d.date) + "<br/>" + d.close)
+       div.html(formatTime(d.date) + "<br/>" + d.close) // equivalent to: div.text(formatTime(d.date) + "\n" + d.close)
          .style("left", (d3.event.pageX) + "px")
          .style("top", (d3.event.pageY - 28) + "px");
        })
