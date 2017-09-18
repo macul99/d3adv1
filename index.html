@@ -96,8 +96,13 @@ d3.csv("data.csv", function(error, data) {
          "</a>" +                          // closing </a> tag
          "<br/>"  + d.close)     
          .style("left", (d3.event.pageX) + "px")             
-         .style("top", (d3.event.pageY - 28) + "px");
+         .style("top", (d3.event.pageY - 28) + "px")
        })
+     .filter(function(d) {return d.close < 400})
+     .style("fill", function(d) {
+        if (d.close <=200) {return "lawngreen"}
+        else { return "red"}
+     });
 
   // add the X Axis
   svg.append("g")
